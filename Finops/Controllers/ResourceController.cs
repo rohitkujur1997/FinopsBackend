@@ -6,10 +6,6 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Rest;
 using Microsoft.Azure.Management.ResourceManager.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json.Linq;
-using Microsoft.Rest.Azure;
-using Newtonsoft.Json;
 
 namespace Finops.Controllers
 {
@@ -39,69 +35,43 @@ namespace Finops.Controllers
             var accessToken = result.AccessToken;
             var resourceClient = new ResourceManagementClient(new TokenCredentials(accessToken));
             resourceClient.SubscriptionId = subscriptionId;
-
+            
             var resources = await resourceClient.Resources.ListAsync();
+            var resourceList = new List<Resources>();
 
             foreach (var resource in resources)
             {
-                //var dbad = finopsDbContext.Resources.FindAsync(resource.Name);
-                //if (dbad != null) continue;
-                //return Ok(dbad);
-                //Console.WriteLine(dbad);
-                Console.WriteLine(resource.Name);
-                //return Ok(resource);
-                //var resourcedata= JsonConvert.DeserializeObject<Dictionary<string, object>>(resource);
-                try { 
-                    var no = resource.Tags;
-                    int? TagId = null;
-                    if (no == null)
-                    {
-                        var rees = new Resources
-                        {
-                            Name = resource.Name,
-                            ResourceId = resource.Id,
-                            Type = resource.Type,
-                            Location = resource.Location,
-                            TagId = TagId
-                        };
-                        finopsDbContext.Resources.AddRange(rees);
-                        await finopsDbContext.SaveChangesAsync();
-                        continue;
-                    }
-                    foreach (var tag in no)
-                    {
-                        //CHECKING
-                        //var c = finopsDbContext.Resources2.FindAsync(1);
-                        //return Ok(c);
-                        //
-                        var res = new Tag
-                        {
-                            Key = tag.Key.ToString(),
-                            Value = tag.Value.ToString()
-                        };
-
-                        finopsDbContext.Tag.AddRange(res);
-                        await finopsDbContext.SaveChangesAsync();
-
-                        var rees = new Resources
-                        {
-                            ResourceId = resource.Id,
-                            Name = resource.Name,
-                            Type = resource.Type,
-                            Location = resource.Location,
-                            TagId = res.TagId
-                        };
-                        finopsDbContext.Resources.AddRange(rees);
-                        await finopsDbContext.SaveChangesAsync();
-                    }
-                }
-                catch (Exception)
+               var res = new Resources
                 {
-                    Console.WriteLine("Looks like resource name already exist in DB as primary key");
-                    continue;
+                    ResourceId = resource.Id,
+                    Name = resource.Name,
+                    Type = resource.Type,
+                    Location = resource.Location,
+                };
+
+                if (resource.Tags != null)
+                { 
+                    res.Tags = resource.Tags.Select(t => new Tag
+                    { 
+                        Key = t.Key,
+
+                        Value = t.Value
+
+                    }).ToList();
+
                 }
+                resourceList.Add(res);
+
             }
-            return Ok(await finopsDbContext.Resources.ToListAsync());
+
+            // Add the fetched resources to the database and save changes
+
+            finopsDbContext.Resources.AddRange(resourceList);
+            await finopsDbContext.SaveChangesAsync();
+
+            return Ok(resourceList);
+
         }
     }
+
 }

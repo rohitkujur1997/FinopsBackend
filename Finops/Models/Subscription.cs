@@ -5,9 +5,10 @@ namespace Finops.Models
     public class Subscription
     {
         [Key]
-        public string subscriptionId { get; set; }
+        public int Resourceid { get; set; }
         public string clientId { get; set; }
         public string tenantId { get; set; }
+        public string subscriptionId { get; set; }
         public string clientSecret { get; set; }
     }
 }

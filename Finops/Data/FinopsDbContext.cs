@@ -17,17 +17,8 @@ namespace Finops.Data
 
         public DbSet<Resources> Resources { get; set; }
 
-        public DbSet<Tag> Tag { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Configure the foreign key relationship
-            modelBuilder.Entity<Resources>()
-                .HasOne(b => b.Tag)
-                .WithMany()
-                .HasForeignKey(b => b.TagId)
-                .OnDelete(DeleteBehavior.Cascade); 
-        }
+        public DbSet<Tag> Tags { get; set; }
 
         // internal Task SaveChangesAsync()
         // {
@@ -49,6 +40,6 @@ namespace Finops.Data
         //    base.OnModelCreating(modelBuilder);
     }
 
-}
+    }
 
 

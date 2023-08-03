@@ -8384,11 +8384,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rokujur\\Downloads\\Saloni\\Finops - Copy (4)\\Finops - Copy\\Finops - Copy\\Finops\\Finops.csproj",
+      "projectUniqueName": "C:\\Users\\rokujur\\Downloads\\nidhi\\Finops - Copy\\Finops\\Finops.csproj",
       "projectName": "Finops",
-      "projectPath": "C:\\Users\\rokujur\\Downloads\\Saloni\\Finops - Copy (4)\\Finops - Copy\\Finops - Copy\\Finops\\Finops.csproj",
+      "projectPath": "C:\\Users\\rokujur\\Downloads\\nidhi\\Finops - Copy\\Finops\\Finops.csproj",
       "packagesPath": "C:\\Users\\rokujur\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rokujur\\Downloads\\Saloni\\Finops - Copy (4)\\Finops - Copy\\Finops - Copy\\Finops\\obj\\",
+      "outputPath": "C:\\Users\\rokujur\\Downloads\\nidhi\\Finops - Copy\\Finops\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rokujur\\AppData\\Roaming\\NuGet\\NuGet.Config",

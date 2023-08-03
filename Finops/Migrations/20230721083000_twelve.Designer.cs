@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Finops.Migrations
 {
     [DbContext(typeof(FinopsDbContext))]
-    [Migration("20230801053858_initial")]
-    partial class initial
+    [Migration("20230721083000_twelve")]
+    partial class twelve
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,32 +26,36 @@ namespace Finops.Migrations
 
             modelBuilder.Entity("Finops.Models.Resources", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResourceId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Name");
-
-                    b.HasIndex("TagId");
+                    b.HasKey("Id");
 
                     b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("Finops.Models.Subscription", b =>
                 {
-                    b.Property<string>("subscriptionId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Resourceid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Resourceid"), 1L, 1);
 
                     b.Property<string>("clientId")
                         .HasColumnType("nvarchar(max)");
@@ -59,31 +63,42 @@ namespace Finops.Migrations
                     b.Property<string>("clientSecret")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("subscriptionId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("tenantId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("subscriptionId");
+                    b.HasKey("Resourceid");
 
                     b.ToTable("Subscription");
                 });
 
             modelBuilder.Entity("Finops.Models.Tag", b =>
                 {
-                    b.Property<int>("TagId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Key")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ResourcesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TagId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.HasIndex("ResourcesId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Finops.Models.User", b =>
@@ -151,14 +166,16 @@ namespace Finops.Migrations
                     b.ToTable("Login");
                 });
 
+            modelBuilder.Entity("Finops.Models.Tag", b =>
+                {
+                    b.HasOne("Finops.Models.Resources", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("ResourcesId");
+                });
+
             modelBuilder.Entity("Finops.Models.Resources", b =>
                 {
-                    b.HasOne("Finops.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Tag");
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

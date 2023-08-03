@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.AspNetCore.Identity;
+using Finops.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ILogin, LoginRepository>();
 builder.Services.AddScoped<ITokenHandler, Finops.Repository.TokenHandler>();
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
+//--
+builder.Services.AddScoped<IEmailService, EmailService>();
+//--
 
 //builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -69,7 +73,6 @@ builder.Services.AddSwaggerGen(options =>
                     {securityScheme, new string[] { } }
                 });
 });
-
 
 
 

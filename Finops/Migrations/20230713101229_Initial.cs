@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Finops.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,8 +17,7 @@ namespace Finops.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,31 +25,35 @@ namespace Finops.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ResourceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subscription",
                 columns: table => new
                 {
-                    subscriptionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Resourceid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     clientId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     tenantId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    subscriptionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     clientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subscription", x => x.subscriptionId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    TagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.TagId);
+                    table.PrimaryKey("PK_Subscription", x => x.Resourceid);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,30 +78,30 @@ namespace Finops.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resources",
+                name: "Tags",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ResourceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TagId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResourceId = table.Column<int>(type: "int", nullable: false),
+                    ResourcesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resources", x => x.Name);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Resources_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
-                        principalColumn: "TagId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Tags_Resources_ResourcesId",
+                        column: x => x.ResourcesId,
+                        principalTable: "Resources",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resources_TagId",
-                table: "Resources",
-                column: "TagId");
+                name: "IX_Tags_ResourcesId",
+                table: "Tags",
+                column: "ResourcesId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -107,16 +110,16 @@ namespace Finops.Migrations
                 name: "Login");
 
             migrationBuilder.DropTable(
-                name: "Resources");
+                name: "Subscription");
 
             migrationBuilder.DropTable(
-                name: "Subscription");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Resources");
         }
     }
 }

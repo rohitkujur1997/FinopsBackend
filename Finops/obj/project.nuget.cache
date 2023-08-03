@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yzGaoSeNUiIAqSzu9YSRtX2bMpXdZ/kEroneUZYtIqv8Z/tLUvgwGIkU/SagzGBoSPUURoTXMRPplBhjibzbNA==",
+  "dgSpecHash": "L3U05sTFsXR1Kv0jmI7d8K0iWra0JTyfy6xkkHa1bf8vXMq4AUaXzty3oa7pOUpM/2+haUXuAYFnOoDFulmC6Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\rokujur\\Downloads\\Saloni\\Finops - Copy (4)\\Finops - Copy\\Finops - Copy\\Finops\\Finops.csproj",
+  "projectFilePath": "C:\\Users\\rokujur\\Downloads\\nidhi\\Finops - Copy\\Finops\\Finops.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rokujur\\.nuget\\packages\\azure.core\\1.32.0\\azure.core.1.32.0.nupkg.sha512",
     "C:\\Users\\rokujur\\.nuget\\packages\\azure.resourcemanager\\1.6.0\\azure.resourcemanager.1.6.0.nupkg.sha512",

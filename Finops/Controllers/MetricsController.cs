@@ -49,29 +49,16 @@ namespace Finops.Controllers
         }
 
         [HttpGet("GetResources")]
-        public async Task<IActionResult> GetResources()
+        public async Task<IActionResult> GetReources()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri($"https://management.azure.com/subscriptions/8309efe0-60f1-413a-90f0-ee27a0f0dbd2/resources?api-version=2021-04-01");
+            client.BaseAddress = new Uri($"https://management.azure.com/subscriptions/{_configuration.GetSection("SubscriptionId").Value}/resources?api-version=2021-04-01");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GetAuthorizationCode());
 
             // Send the request
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, client.BaseAddress);
             var response = await MakeRequestAsync(request, client);
-
-
-
-            //foreach (var resp in response)
-            //{
-            //    var res = new Resources
-            //    {
-            //        ResourceId = resp.Id,
-            //        Name = resp.Name,
-            //        Type = resp.Type,
-            //        Location = resp.Location,
-            //    };
-            //}
 
             return Ok(response);
         }
@@ -129,7 +116,7 @@ namespace Finops.Controllers
                 return "Error occur";
             }
         }
-        //using in metric api
+
         public static async Task<string> GetAllResources()
         {
             HttpClient client = new HttpClient();
@@ -252,6 +239,7 @@ namespace Finops.Controllers
             }
             return Ok(output);
         }
+
     }
 }
 
